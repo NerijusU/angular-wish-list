@@ -5,12 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { WishItem } from '../shared/models/wishItem';
 import { WishListComponent } from './wish-list/wish-list.component';
 import { AddWishFormComponent } from './add-wish-form/add-wish-form.component';
-
-const filters = [
-  (item: WishItem) => item,
-  (item: WishItem) => !item.isComplete,
-  (item: WishItem) => item.isComplete,
-];
+import { WishFilterComponent } from './wish-filter/wish-filter.component';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +16,7 @@ const filters = [
     FormsModule,
     WishListComponent,
     AddWishFormComponent,
+    WishFilterComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
@@ -32,11 +28,5 @@ export class AppComponent {
     new WishItem('Find Grass'),
   ];
 
-  listFilter: any = '0';
-
-  title = 'wishlist';
-
-  get visibleItems(): WishItem[] {
-    return this.items.filter(filters[this.listFilter]);
-  }
+  filter: any = () => {};
 }
