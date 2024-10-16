@@ -28,5 +28,5 @@ export class AppComponent {
     new WishItem('Find Grass'),
   ];
 
-  filter: any = () => {};
+  filter: any;
 }
