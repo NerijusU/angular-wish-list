@@ -1,4 +1,9 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  AfterViewInit,
+} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -7,6 +12,7 @@ import { WishListComponent } from './wish-list/wish-list.component';
 import { AddWishFormComponent } from './add-wish-form/add-wish-form.component';
 import { WishFilterComponent } from './wish-filter/wish-filter.component';
 import events from '../shared/services/EventService';
+import { WishService } from './wish.service';
 
 @Component({
   selector: 'app-root',
@@ -22,14 +28,14 @@ import events from '../shared/services/EventService';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent {
-  items: WishItem[] = [
-    new WishItem('To learn Angular'),
-    new WishItem('Get Coffe', true),
-    new WishItem('Find Grass'),
-  ];
+export class AppComponent implements OnInit, AfterViewInit {
+  items: WishItem[] = [];
+  filter: any;
 
-  constructor() {
+  constructor(
+    private wishService: WishService,
+    private cdr: ChangeDetectorRef
+  ) {
     events.listen('removeWish', (wish: any) => {
       // todo: remove wish from items
 
@@ -38,5 +44,15 @@ export class AppComponent {
     });
   }
 
-  filter: any;
+  ngOnInit(): void {
+    this.wishService.getWishes().subscribe((data: any) => {
+      this.items = data;
+    });
+  }
+
+  ngAfterViewInit(): void {
+    // Any binding or filter-related logic that could cause issues
+    this.filter = (item: WishItem) => item;
+    this.cdr.detectChanges();
+  }
 }
