@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -11,13 +16,16 @@ import { CommonModule } from '@angular/common';
 })
 export class ContactComponent {
   contactForm = new FormGroup({
-    senderName: new FormControl(''),
-    senderEmail: new FormControl(''),
-    senderMessage: new FormControl(''),
+    senderName: new FormControl('', Validators.required),
+    senderEmail: new FormControl('', [Validators.required, Validators.email]),
+    senderMessage: new FormControl('', [
+      Validators.required,
+      Validators.minLength(10),
+    ]),
   });
 
   submitForm() {
-    console.log(this.contactForm.value);
+    console.log(this.contactForm.valid);
     // if (this.senderNameControl.dirty) {
     //   alert('you changed the name field');
     // }
